@@ -18,8 +18,9 @@ public class ScreenCaptureThread implements Runnable {
     private static boolean TRANSLATIONFLAG = true;
     private static Robot robot;
     private String remotehostname;
+    private String folder;
 
-    ScreenCaptureThread(String remotehostname){
+    ScreenCaptureThread(String remotehostname, String folder){
         logger.info("ScreenCaptureThread init");
         try {
             robot = new Robot();
@@ -27,6 +28,7 @@ public class ScreenCaptureThread implements Runnable {
             e.printStackTrace();
         }
         this.remotehostname = remotehostname;
+        this.folder = folder;
     }
 
     @Override
@@ -51,8 +53,8 @@ public class ScreenCaptureThread implements Runnable {
 
         /// Create directory on remote host
         try {
-            logger.info("Create directory: " + "\\\\" + remotehostname +"\\screencap\\" + hostname);
-            new File("\\\\" + remotehostname +"\\screencap\\" + hostname).mkdir();
+            logger.info("Create directory: " + "\\\\" + remotehostname +"\\"+folder+"\\" + hostname);
+            new File("\\\\" + remotehostname +"\\"+folder+"\\" + hostname).mkdir();
         } catch (Exception er){
             logger.warning("Exception");
             return;
@@ -70,8 +72,11 @@ public class ScreenCaptureThread implements Runnable {
                 File outputFile = new File(
                         "\\\\"
                                 + remotehostname
-                                + "\\screencap\\"
-                                + hostname +"\\"
+                                + "\\"
+                                +folder
+                                +"\\"
+                                + hostname
+                                +"\\"
                                 + formatForDateNow.format(date)
                                 + " scap-"
                                 + iterator
